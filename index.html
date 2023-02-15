@@ -1,77 +1,310 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+      /* Style for input element */
+      input[type="text"] {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 8px;
+        font-size: 16px;
+      }
+
+      /* Style for placeholder text */
+      input[type="text"]::placeholder {
+        color: #999;
+      }
+
+      /* Style for when input element is focused */
+      input[type="text"]:focus {
+        outline: none;
+        border-color: #1e90ff;
+        box-shadow: 0 0 5px #1e90ff;
+      }
+
+      /* Style for button element */
+      button {
+        background-color: #1e90ff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 12px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      /* Style for when button element is hovered */
+      button:hover {
+        background-color: #0066cc;
+      }
+
+      /* Style for when button element is clicked */
+      button:active {
+        background-color: #003399;
+      }
+      /* Style for app bar */
+      .app-bar {
+        background-color: #1e90ff;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50px;
+        font-size: 24px;
+        font-weight: bold;
+      }
+      /* main has padding */
+      main {
+        padding: 20px;
+      }
+      /* Style for input element with class form-control */
+      .form-control {
+        display: block;
+        width: 100%;
+        height: calc(1.5em + 0.75rem + 2px);
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+      }
+
+      /* Style for when input element with class form-control is focused */
+      .form-control:focus {
+        color: #495057;
+        background-color: #fff;
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+      }
+
+      /* Style for when input element with class form-control is disabled */
+      .form-control:disabled {
+        background-color: #e9ecef;
+        opacity: 1;
+      }
+
+      /* Style for row element */
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+
+        background-color: #f8f9fa;
+        padding: 10px;
+        box-sizing: border-box;
+      }
+
+      /* Style for column element */
+      .col-3 {
+        flex: 0 0 30%;
+        max-width: 30%;
+      }
+
+      .col-66 {
+        flex: 0 0 66%;
+        max-width: 66%;
+      }
+
+      /* every div has 5px bottom margin */
+      div {
+        margin-bottom: 10px;
+      }
+      /* input min witdh 50% */
+      #sample5_address {
+        min-width: 50%;
+      }
+      /* Style for file picker container */
+      .file-picker-container {
+        position: relative;
+      }
+
+      /* Style for file picker input */
+      input[type="file"] {
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+      }
+
+      /* Style for file picker button */
+      .file-picker-button {
+        display: inline-block;
+        background-color: #4caf50;
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      /* Style for file name display */
+      .file-name-display {
+        margin-top: 4px;
+      }
+    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>My Website</title>
-    <link rel="stylesheet" href="./style.css">
-    <link rel="icon" href="./favicon.ico" type="image/x-icon">
-    <input type="text" id="sample5_address" placeholder="주소">
-    <input type="button" onclick="sample5_execDaumPostcode()" value="주소 검색"><br>
-    <div id="map" style="width:300px;height:300px;margin-top:10px;display:none"></div>
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="icon" href="./favicon.ico" type="image/x-icon" />
+
+    <!-- text tag -->
+
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d30cf27ee4488c134c46500c35c25f23&libraries=services"></script>
+    <script></script>
     <script>
-      var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-          mapOption = {
-              center: new daum.maps.LatLng(37.537187, 127.005476), // 지도의 중심좌표
-              level: 5 // 지도의 확대 레벨
-        };
-
-    //지도를 미리 생성
-    var map = new daum.maps.Map(mapContainer, mapOption);
-    //주소-좌표 변환 객체를 생성
-    var geocoder = new daum.maps.services.Geocoder();
-    //마커를 미리 생성
-    var marker = new daum.maps.Marker({
-        position: new daum.maps.LatLng(37.537187, 127.005476),
-        map: map
-    });
-
-
-    function sample5_execDaumPostcode() {
+      function sample5_execDaumPostcode() {
         new daum.Postcode({
-            oncomplete: function(data) {
-                var addr = data.address; // 최종 주소 변수
+          oncomplete: function (data) {
+            var addr = data.address; // 최종 주소 변수
 
-                // 주소 정보를 해당 필드에 넣는다.
-                document.getElementById("sample5_address").value = addr;
-                // 주소로 상세 정보를 검색
-                geocoder.addressSearch(data.address, function(results, status) {
-                    // 정상적으로 검색이 완료됐으면
-                    if (status === daum.maps.services.Status.OK) {
+            console.log(addr.address);
 
-                        var result = results[0]; //첫번째 결과의 값을 활용
+            // 주소 정보를 해당 필드에 넣는다.
+            document.getElementById("sample5_address").value = addr;
 
-                        // 해당 주소에 대한 좌표를 받아서
-                        var coords = new daum.maps.LatLng(result.y, result.x);
-                        // 지도를 보여준다.
-                        mapContainer.style.display = "block";
-                        map.relayout();
-                        // 지도 중심을 변경한다.
-                        map.setCenter(coords);
-                        // 마커를 결과값으로 받은 위치로 옮긴다.
-                        marker.setPosition(coords)
+            geocoder.addressSearch(data.address, function (results, status) {
+              // 정상적으로 검색이 완료됐으면
+              if (status === daum.maps.services.Status.OK) {
+                var result = results[0]; //첫번째 결과의 값을 활용
 
-                        
-                    }
-                });
-                parent.console.log(data.address);
-                parent.console.log(data.address);
-                // return result for parent in iframe
-                parent.postMessage(data, '*');
-            }
+                // 해당 주소에 대한 좌표를 받아서
+                var coords = new daum.maps.LatLng(result.y, result.x);
+                // 지도를 보여준다.
+                mapContainer.style.display = "block";
+                map.relayout();
+                // 지도 중심을 변경한다.
+                map.setCenter(coords);
+                // 마커를 결과값으로 받은 위치로 옮긴다.
+                marker.setPosition(coords);
+              }
+            });
+            parent.console.log(data.address);
+            parent.console.log(data.address);
+            // return result for parent in iframe
+            parent.postMessage(data, "*");
+          },
         }).open();
-    }
-</script>
+      }
+    </script>
+    <!-- script index js -->
   </head>
-  <body>
-    <main>
 
+  <div class="app-bar">
+    <span>선문대학교 문학인</span>
+  </div>
+  <!-- Database name tag -->
+  <h1>💾 Database LIN</h1>
 
-    </main>
-	<script src="index.js"></script>
-  </body>
+  <form method="POST" id="myForm">
+    <div class="row">
+      <div class="col-3">
+        <label for="category1">대분류</label>
+        <select class="form-control" id="Category" name="category">
+          <option disabled selected value="">Select a category</option>
+          <option>대분류카테고리1</option>
+          <option>대분류카테고리2</option>
+          <option>대분류카테고리3</option>
+        </select>
+      </div>
+      <div class="col-3">
+        <label for="category2">중분류</label>
+        <select class="form-control" id="Subcategory" name="sub-category">
+          <option disabled selected value="">Select a category</option>
+          <option>중분류카테고리1</option>
+          <option>중분류서브카테고리2</option>
+          <option>중분류서브카테고리3</option>
+        </select>
+      </div>
+      <div class="col-3">
+        <label for="category2">소분류</label>
+        <select
+          class="form-control"
+          id="SubSubCategory"
+          name="sub-sub-category"
+        >
+          <option disabled selected value="">Select a category</option>
+          <option>소분류카테고리1</option>
+          <option>소분류카테고리2</option>
+          <option>소분류카테고리3</option>
+        </select>
+      </div>
+    </div>
+    <!-- Title input, screen width 100%  -->
+    <div class="row">
+      <label for="title">제목</label>
+      <input type="text" class="form-control" id="title" name="title" />
+    </div>
+    <div class="row">
+      <!-- textarea height should be 5 line  -->
+      <label for="content">내용</label>
+      <textarea
+        class="form-control"
+        id="content"
+        name="content"
+        rows="5"
+        style="height: 100px"
+      ></textarea>
+    </div>
+    <div class="row" style="height: auto">
+      <input
+        type="text"
+        id="sample5_address"
+        name="address"
+        placeholder="주소"
+        style="flex: 3"
+        readonly
+        onclick="sample5_execDaumPostcode()"
+      />
+      <button
+        type="button"
+        onclick="sample5_execDaumPostcode()"
+        style="margin-left: 5px; flex: 1"
+      >
+        주소 검색
+      </button>
+    </div>
+    <div class="row">
+      <div
+        id="kakaoMap"
+        style="width: 100%; height: 400px; display: none"
+      ></div>
+    </div>
+    <div class="row file-picker-container">
+      <div class="col-66">
+        <label for="filePicker" class="file-picker-button">파일 첨부하기</label>
+        <input type="file" id="filePicker" name="filePicker" />
+      </div>
+      <div class="col-3">
+        <div class="file-name-display">jpg, png, pdf ..</div>
+      </div>
+    </div>
+    <div class="row">
+      <!-- textarea height should be 5 line  -->
+      <label for="content">참고사항</label>
+      <textarea
+        class="form-control"
+        id="remark"
+        name="remark"
+        rows="5"
+        style="height: 80px"
+      ></textarea>
+    </div>
+
+    <!-- form submit button call submitForm function in index.js -->
+    <button type="button" onclick="submitForm()">Submit</button>
+  </form>
+
+  <script src="./index.js"></script>
 </html>
