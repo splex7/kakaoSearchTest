@@ -41,4 +41,30 @@ function submitForm() {
 
   // Create a dialog with the form data
   alert("Data is...\n" + formDataString + "\n" + JSON.stringify(formDataJSON));
+
+  // Make an API call to insert the data into the Google Sheet
+  const data = {};
+  for (const [key, value] of formData.entries()) {
+    data[key] = value;
+  }
+
+  // Make an API call to insert the data into the Google Sheet
+  gapi.client.sheets.spreadsheets.values
+    .append({
+      spreadsheetId: "1UCIxGDa48de_WKlCj0_Fa_KpENjxOSfb-ZAI7PkL8Rc",
+      range: "a!A1",
+      valueInputOption: "USER_ENTERED",
+      insertDataOption: "INSERT_ROWS",
+      resource: {
+        values: [[data.field1, data.field2, data.field3]],
+      },
+    })
+    .then(
+      function (response) {
+        console.log("Data inserted successfully:", response.result);
+      },
+      function (error) {
+        console.error("Error inserting data:", error.result.error.message);
+      }
+    );
 }
